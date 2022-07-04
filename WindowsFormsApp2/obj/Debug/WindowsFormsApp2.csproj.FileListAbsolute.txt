@@ -24,3 +24,4 @@ F:\Long\C#\WDF\WinFormApp2\WindowsFormsApp2\WindowsFormsApp2\bin\Debug\RestSharp
 F:\Long\C#\WDF\WinFormApp2\WindowsFormsApp2\WindowsFormsApp2\bin\Debug\Newtonsoft.Json.xml
 F:\Long\C#\WDF\WinFormApp2\WindowsFormsApp2\WindowsFormsApp2\bin\Debug\NuGet.Frameworks.xml
 F:\Long\C#\WDF\WinFormApp2\WindowsFormsApp2\WindowsFormsApp2\bin\Debug\RestSharp.xml
+F:\Long\C#\WDF\WinFormApp2\WindowsFormsApp2\WindowsFormsApp2\obj\Debug\WindowsFormsApp2.Form2.resources

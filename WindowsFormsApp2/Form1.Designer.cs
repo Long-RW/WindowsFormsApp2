@@ -41,7 +41,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
-            this.StaffIF = new System.Windows.Forms.Button();
             this.PictureOut = new System.Windows.Forms.PictureBox();
             this.PictureOutText = new System.Windows.Forms.Label();
             this.PictureIn = new System.Windows.Forms.PictureBox();
@@ -69,6 +68,8 @@
             this.WeightLabel = new System.Windows.Forms.Label();
             this.DateInLabel = new System.Windows.Forms.Label();
             this.TimeInLabel = new System.Windows.Forms.Label();
+            this.Map = new System.Windows.Forms.Button();
+            this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Camera)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PictureOut)).BeginInit();
@@ -105,9 +106,9 @@
             this.panel1.Controls.Add(this.lstBaud);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.lstCom);
-            this.panel1.Location = new System.Drawing.Point(1680, 154);
+            this.panel1.Location = new System.Drawing.Point(1361, 154);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(232, 414);
+            this.panel1.Size = new System.Drawing.Size(232, 382);
             this.panel1.TabIndex = 2;
             // 
             // comBoxLable
@@ -180,7 +181,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(1581, 19);
+            this.label3.Location = new System.Drawing.Point(1395, 19);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(160, 42);
             this.label3.TabIndex = 15;
@@ -189,15 +190,6 @@
             // serialPort1
             // 
             this.serialPort1.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort1_DataReceived);
-            // 
-            // StaffIF
-            // 
-            this.StaffIF.Location = new System.Drawing.Point(115, 12);
-            this.StaffIF.Name = "StaffIF";
-            this.StaffIF.Size = new System.Drawing.Size(75, 49);
-            this.StaffIF.TabIndex = 8;
-            this.StaffIF.Text = "StaffIF";
-            this.StaffIF.UseVisualStyleBackColor = true;
             // 
             // PictureOut
             // 
@@ -309,9 +301,9 @@
             this.listView1.FullRowSelect = true;
             this.listView1.GridLines = true;
             this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(0, 542);
+            this.listView1.Location = new System.Drawing.Point(0, 496);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(1940, 305);
+            this.listView1.Size = new System.Drawing.Size(1615, 305);
             this.listView1.TabIndex = 19;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -370,7 +362,7 @@
             // 
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(1406, 180);
+            this.label12.Location = new System.Drawing.Point(1100, 272);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(74, 20);
             this.label12.TabIndex = 28;
@@ -380,7 +372,7 @@
             // 
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(1406, 228);
+            this.label13.Location = new System.Drawing.Point(1100, 320);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(63, 20);
             this.label13.TabIndex = 29;
@@ -390,7 +382,7 @@
             // 
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.Location = new System.Drawing.Point(1100, 272);
+            this.label14.Location = new System.Drawing.Point(767, 316);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(71, 20);
             this.label14.TabIndex = 30;
@@ -450,7 +442,7 @@
             // 
             this.WeightLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.WeightLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.WeightLabel.Location = new System.Drawing.Point(1180, 272);
+            this.WeightLabel.Location = new System.Drawing.Point(875, 316);
             this.WeightLabel.Name = "WeightLabel";
             this.WeightLabel.Size = new System.Drawing.Size(175, 23);
             this.WeightLabel.TabIndex = 36;
@@ -460,7 +452,7 @@
             // 
             this.DateInLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.DateInLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DateInLabel.Location = new System.Drawing.Point(1486, 179);
+            this.DateInLabel.Location = new System.Drawing.Point(1180, 271);
             this.DateInLabel.Name = "DateInLabel";
             this.DateInLabel.Size = new System.Drawing.Size(175, 23);
             this.DateInLabel.TabIndex = 37;
@@ -470,11 +462,26 @@
             // 
             this.TimeInLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.TimeInLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TimeInLabel.Location = new System.Drawing.Point(1486, 225);
+            this.TimeInLabel.Location = new System.Drawing.Point(1180, 317);
             this.TimeInLabel.Name = "TimeInLabel";
             this.TimeInLabel.Size = new System.Drawing.Size(175, 23);
             this.TimeInLabel.TabIndex = 38;
             this.TimeInLabel.Text = "Giờ vào";
+            // 
+            // Map
+            // 
+            this.Map.Location = new System.Drawing.Point(131, 12);
+            this.Map.Name = "Map";
+            this.Map.Size = new System.Drawing.Size(85, 49);
+            this.Map.TabIndex = 39;
+            this.Map.Text = "Map";
+            this.Map.UseVisualStyleBackColor = true;
+            this.Map.Click += new System.EventHandler(this.Map_Click);
+            // 
+            // timer2
+            // 
+            this.timer2.Interval = 10;
+            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
             // 
             // Form1
             // 
@@ -483,7 +490,8 @@
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.ClientSize = new System.Drawing.Size(1940, 847);
+            this.ClientSize = new System.Drawing.Size(1615, 801);
+            this.Controls.Add(this.Map);
             this.Controls.Add(this.TimeInLabel);
             this.Controls.Add(this.DateInLabel);
             this.Controls.Add(this.WeightLabel);
@@ -511,7 +519,6 @@
             this.Controls.Add(this.PictureIn);
             this.Controls.Add(this.PictureOutText);
             this.Controls.Add(this.PictureOut);
-            this.Controls.Add(this.StaffIF);
             this.Controls.Add(this.UART_SET);
             this.Controls.Add(this.panel1);
             this.Cursor = System.Windows.Forms.Cursors.Arrow;
@@ -519,7 +526,7 @@
             this.Name = "Form1";
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "m";
+            this.Text = "SmartPWST";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -545,7 +552,6 @@
         private System.Windows.Forms.Label comBoxLable;
         private System.Windows.Forms.ComboBox cBoxCamera;
         private System.Windows.Forms.PictureBox Camera;
-        private System.Windows.Forms.Button StaffIF;
         private System.Windows.Forms.Label PictureOutText;
         public System.Windows.Forms.PictureBox PictureOut;
         public System.Windows.Forms.PictureBox PictureIn;
@@ -574,6 +580,8 @@
         private System.Windows.Forms.Label WeightLabel;
         private System.Windows.Forms.Label DateInLabel;
         private System.Windows.Forms.Label TimeInLabel;
+        private System.Windows.Forms.Button Map;
+        private System.Windows.Forms.Timer timer2;
     }
 }
 

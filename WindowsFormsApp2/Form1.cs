@@ -17,64 +17,76 @@ using FireSharp.Response;
 namespace WindowsFormsApp2
 {   
     public partial class Form1 : Form
-    {   
+    {
+        /*************************Camera Variables********************************************************************************************/
         //Tạo địa chỉ lưu ảnh
         private string PictureOutSavePath = Application.StartupPath + "\\Resources\\PictureOut\\";
         private string PictureInSavePath = Application.StartupPath + "\\Resources\\PictureIn\\";
         //Khởi tạo Camera
         private FilterInfoCollection Cameras;
         private VideoCaptureDevice cam;
+        public double latitude;
+        public double longitude;
+        /***********************************************************************************************************************************/
 
+        /*************************Staff Variables********************************************************************************************/
         //Lưu trữ dữ liệu nhân viên
         private string[] UID_Key = { "0", "1d e6 af c9 9d", "63 ac b1 18 66", "88  4 80 41 4d", "6c 5c 4d 49 34" };
 
-        //Dữ liệu từ thẻ
-        //StaffData Base IP
+        //Mảng chứa tốc độ baud của UART
+        string[] pause = { "1200", "2400", "4800", "9600", "19200", "38400", "57600", "115200" };
+
+        //FireBasew Config
         IFirebaseConfig config = new FirebaseConfig
         {
             AuthSecret = "r75iqk3zbtFNumVZ5APAfQOCRxSix7Z3jQ5ZwbcJ",
             BasePath = "https://staffdatabase-84d43-default-rtdb.asia-southeast1.firebasedatabase.app/"
         };
+        IFirebaseClient client;
 
+        //DataBase của nhân viên
+        List<Staff> StaffDb = new List<Staff>();
+        
         //List lưu trữ trạng thái vào ra của xe tải
         private List<bool> truckState = new List<bool>();
+
         //List lưu trữ thời gian xuất kho của xe tải
         private List<string> listDateOut = new List<string>();
         private List<string> listTimeOut = new List<string>();
-        //DataBase của nhân viên
-        List<Staff> StaffDb = new List<Staff>();
-        IFirebaseClient client;
 
         //Biến đếm của STT
         int counterOfSTT = 0;
-
+        /***********************************************************************************************************************************/
         public Form1()
         {
             InitializeComponent();
             Control.CheckForIllegalCrossThreadCalls = false;
-
+            /*************************Camera Config****************************************************************/
             //Đọc dữ liệu từ camera của máy tính
             Cameras = new FilterInfoCollection(FilterCategory.VideoInputDevice);
             //Add Camera được cọn từ Combobox
-            foreach(FilterInfo info in Cameras)
+            foreach (FilterInfo info in Cameras)
             {
                 cBoxCamera.Items.Add(info.Name);
             }
-            cBoxCamera.SelectedIndex = 0;
+            cBoxCamera.SelectedIndex = 0
+            /******************************************************************************************************/
+
+;           /*************************Staff Config****************************************************************/
             //Gán trạng thái ở trong kho cho tất cả các xe
             for (int i = 0; i < UID_Key.Length; i++)
             {
                 truckState.Add(false);
             }
+
+            //Gán dữ liệu vào ra cho các xe
             for (int i = 0; i < UID_Key.Length; i++)
             {
                 listDateOut.Add("");
                 listTimeOut.Add("");
             }
+            /******************************************************************************************************/
         }
-
-        //Mảng chứa tốc độ baud của UART
-        string[] pause = { "1200", "2400", "4800", "9600", "19200", "38400", "57600", "115200" };
 
         //Timer đếm cho đồng hồ thời gian thực
         private void timer1_Tick(object sender, EventArgs e)
@@ -82,20 +94,28 @@ namespace WindowsFormsApp2
             label3.Text = DateTime.Now.ToString("hh:mm tt");
         }
 
+  
+        private void UART_SET_Click(object sender, EventArgs e)
+        {
+            if (panel1.Visible == false)
+            {
+                panel1.Visible = true;
+            }
+            else
+            {
+                panel1.Visible = false;
+            }
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {   
             client = new FireSharp.FirebaseClient(config);
 
-            //dataGridView1.Dock = DockStyle.Bottom;
-            //dataGridView1.Columns.Add("STT", "STT");
-            //dataGridView1.Columns.Add("StaffID", "Mã số nhân viên");
-            //dataGridView1.Columns.Add("Name", "Họ và tên");
-            //dataGridView1.Columns.Add("DateOfBirth", "Ngày sinh");
-            //dataGridView1.Columns.Add("PhoneNumber", "Số điện thoại");
-            //dataGridView1.Columns.Add("LicensePlate", "Biển số xe");
             //Khởi tạo timer
             timer1.Enabled = true;
             timer1.Start();
+            timer2.Enabled = true;
+            timer2.Start();
             //Cập nhật thời gian đồng hồ liên tục
             label3.Text = DateTime.Now.ToString("hh:mm tt");
 
@@ -111,9 +131,9 @@ namespace WindowsFormsApp2
             cam = new VideoCaptureDevice(Cameras[cBoxCamera.SelectedIndex].MonikerString);
             cam.NewFrame += Cam_NewFrame;
             cam.Start();    //Khởi động camera
-            LoadListView();
+            LoadListView(); //Hiển thị listView
         }
-
+        /********************************************Staff Data Display Function*************************************/
         private void LoadListView()
         {
             listView1.Columns.Add("STT");
@@ -130,8 +150,7 @@ namespace WindowsFormsApp2
         }
 
         private async void PrintNewItem(int i, int counter, bool truckState, string Weight )
-        {   
-            
+        {    
             FirebaseResponse resp2 = await client.GetTaskAsync("Staff/" + Convert.ToString(i));
 
             Staff obj2 = resp2.ResultAs<Staff>();
@@ -189,6 +208,9 @@ namespace WindowsFormsApp2
 
             listView1.Items.Add(STT);
         }
+        /******************************************************************************************************/
+
+        /*****************************************Camera Function**********************************************/
         //Clone những gì Camera ghi lại và hiển thị trên màn hình theo thời gian thực
         private void Cam_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
@@ -220,18 +242,50 @@ namespace WindowsFormsApp2
             }
         }
 
-        private void UART_SET_Click(object sender, EventArgs e)
+        private void SavePictureOut(int i)
         {
-            if(panel1.Visible == false)
+            if (PictureOut.Image != null)
             {
-                panel1.Visible = true;
+                PictureOut.Image.Dispose();
+                PictureOut.Image = null;
             }
-            else
-            {
-                panel1.Visible = false;
-            }
+            Image image = Camera.Image;
+            image.Save(PictureOutSavePath + Convert.ToString(i) + ".jpg");
         }
 
+        private void DisPlayPictureOut(int i)
+        {
+
+            PictureOut.Image = Image.FromFile(PictureOutSavePath + Convert.ToString(i) + ".jpg");
+        }
+
+        private void SavePictureIn(int i)
+        {
+            if (PictureIn.Image != null)
+            {
+                PictureIn.Image.Dispose();
+                PictureIn.Image = null;
+            }
+            Image image = Camera.Image;
+            image.Save(PictureInSavePath + Convert.ToString(i) + ".jpg");
+        }
+
+        private void DisPlayPictureIn(int i)
+        {
+
+            PictureIn.Image = Image.FromFile(PictureInSavePath + Convert.ToString(i) + ".jpg");
+        }
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            if (cam != null && cam.IsRunning)
+            {
+                cam.Stop();
+            }
+        }
+        /******************************************************************************************************/
+
+        /*****************************************UART Receive Event**********************************************/
         private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             counterOfSTT++;
@@ -290,49 +344,16 @@ namespace WindowsFormsApp2
                 }
             }
         }
+        /**********************************************************************************************************************/
 
-        private void SavePictureOut(int i)
-        {   
-            if(PictureOut.Image != null)
-            {
-                PictureOut.Image.Dispose();
-                PictureOut.Image = null;
-            }
-            Image image = Camera.Image;
-            image.Save(PictureOutSavePath + Convert.ToString(i) + ".jpg");
-        }
-
-        private void DisPlayPictureOut(int i)
+        private void Map_Click(object sender, EventArgs e)
         {
-            
-            PictureOut.Image = Image.FromFile(PictureOutSavePath+ Convert.ToString(i) + ".jpg");
+            new Form2().Show();
         }
 
-        private void SavePictureIn(int i)
+        private async void timer2_Tick(object sender, EventArgs e)
         {
-            if (PictureIn.Image != null)
-            {
-                PictureIn.Image.Dispose();
-                PictureIn.Image = null;
-            }
-            Image image = Camera.Image;
-            image.Save(PictureInSavePath + Convert.ToString(i) + ".jpg");
-        }
 
-        private void DisPlayPictureIn(int i)
-        {
-            
-            PictureIn.Image = Image.FromFile(PictureInSavePath + Convert.ToString(i) + ".jpg");
         }
-        protected override void OnClosed(EventArgs e)
-        {
-            base.OnClosed(e);
-            if (cam != null && cam.IsRunning)
-            {
-                cam.Stop();
-            }
-        }
-
-
     }
 }

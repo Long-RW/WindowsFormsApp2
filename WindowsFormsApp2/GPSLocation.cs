@@ -6,13 +6,8 @@ using System.Threading.Tasks;
 
 namespace WindowsFormsApp2
 {
-    public class Staff
+    public class GPSLocation
     {
-        public string Name { get; set; }
-        public string DateOfBirth { get; set; }
-        public string StaffID { get; set; }
-        public string PhoneNumber { get; set; }
-        public string LicensePlate { get; set; }
         public double latitude { get; set; }
         public double longitude { get; set; }
     }
