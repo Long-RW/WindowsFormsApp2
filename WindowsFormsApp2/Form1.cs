@@ -39,8 +39,8 @@ namespace WindowsFormsApp2
         //FireBasew Config
         IFirebaseConfig config = new FirebaseConfig
         {
-            AuthSecret = "r75iqk3zbtFNumVZ5APAfQOCRxSix7Z3jQ5ZwbcJ",
-            BasePath = "https://staffdatabase-84d43-default-rtdb.asia-southeast1.firebasedatabase.app/"
+            AuthSecret = "XpG3HiAbNsb0PKF9pMVmfkpWHWvHk16enIATyL2O",
+            BasePath = "https://staffdatabase2-9d424-default-rtdb.asia-southeast1.firebasedatabase.app/"
         };
         IFirebaseClient client;
 
